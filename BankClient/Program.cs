@@ -72,5 +72,4 @@ while (!lifetime.ApplicationStopping.IsCancellationRequested)
 
     // Sleep and run again
     await Task.Delay(TimeSpan.FromMilliseconds(200));
-    break;
 }
