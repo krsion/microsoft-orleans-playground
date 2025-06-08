@@ -130,3 +130,15 @@ When a withdraw would overdraw an account, the client will print an error like s
 Error transferring 100 credits from Derick to Xaawo: Transaction 2edc92f5-a94d-4167-9522-fa661cc030ff Aborted because of an unhandled exception in a grain method call. See InnerException for details.
         InnerException: Withdrawing 100 credits from account "Derick" would overdraw it. This account has 0 credits.
 ```
+
+## Configuring Azure Table Storage
+
+Set the `AZURE_STORAGE_CONNECTION_STRING` environment variable before starting the `BankServer` process to enable Azure Table Storage for grain and transactional state. Tables named `OrleansGrainState` and `TransactionalState` will be created if they do not exist.
+
+This repository includes a workflow, `.github/workflows/azure-resources.yml`, which provisions these tables. Configure the following secrets and run the workflow:
+
+- `AZURE_CREDENTIALS` – credentials JSON for `azure/login`.
+- `AZURE_RG` – resource group name.
+- `AZURE_LOCATION` – Azure region.
+- `AZURE_STORAGE_ACCOUNT` – storage account name.
+
