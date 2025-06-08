@@ -11,5 +11,7 @@
     <PackageVersion Include="Microsoft.Orleans.Sdk" Version="9.0.1" />
     <PackageVersion Include="Microsoft.Orleans.Server" Version="9.0.1" />
     <PackageVersion Include="Microsoft.Orleans.Transactions" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Orleans.Persistence.AzureStorage" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Orleans.Transactions.AzureStorage" Version="9.0.1" />
   </ItemGroup>
 </Project>

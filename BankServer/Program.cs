@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans.Transactions.Abstractions;
@@ -14,7 +15,16 @@ await Host.CreateDefaultBuilder(args)
     {
         siloBuilder
             .UseLocalhostClustering()
-            .AddMemoryGrainStorageAsDefault()
+            .AddAzureTableGrainStorageAsDefault(options =>
+            {
+                var connectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
+                options.ConfigureTableServiceClient(connectionString);
+            })
+            .AddAzureTableTransactionalStateStorageAsDefault(options =>
+            {
+                var connectionString = Environment.GetEnvironmentVariable("AZURE_STORAGE_CONNECTION_STRING");
+                options.ConfigureTableServiceClient(connectionString);
+            })
             .UseTransactions();
     })
     .RunConsoleAsync();
