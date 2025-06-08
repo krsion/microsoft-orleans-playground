@@ -137,7 +137,9 @@ Set the `AZURE_STORAGE_CONNECTION_STRING` environment variable before starting t
 
 This repository includes a workflow, `.github/workflows/azure-resources.yml`, which provisions these tables. Configure the following secrets and run the workflow:
 
-- `AZURE_CREDENTIALS` – credentials JSON for `azure/login`.
+- `AZURE_CLIENT_ID` – client ID for `azure/login`.
+- `AZURE_TENANT_ID` – tenant ID for `azure/login`.
+- `AZURE_SUBSCRIPTION_ID` – subscription ID for `azure/login`.
 - `AZURE_RG` – resource group name.
 - `AZURE_LOCATION` – Azure region.
 - `AZURE_STORAGE_ACCOUNT` – storage account name.
