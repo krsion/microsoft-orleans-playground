@@ -1,17 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <UserSecretsId>a595f575-10ab-4fd0-bb44-3ab3a6becc98</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Hosting"/>
-    <PackageReference Include="Microsoft.Extensions.Logging.Console"/>
-    <PackageReference Include="Microsoft.Orleans.Server"/>
-    <PackageReference Include="Microsoft.Orleans.Transactions"/>
-    <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage"/>
-    <PackageReference Include="Microsoft.Orleans.Transactions.AzureStorage"/>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" />
+    <PackageReference Include="Microsoft.Orleans.Server" />
+    <PackageReference Include="Microsoft.Orleans.Transactions" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AzureStorage" />
+    <PackageReference Include="Microsoft.Orleans.Transactions.AzureStorage" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AccountTransfer.Grains\AccountTransfer.Grains.csproj"/>
-    <ProjectReference Include="..\AccountTransfer.Interfaces\AccountTransfer.Interfaces.csproj"/>
+    <ProjectReference Include="..\AccountTransfer.Grains\AccountTransfer.Grains.csproj" />
+    <ProjectReference Include="..\AccountTransfer.Interfaces\AccountTransfer.Interfaces.csproj" />
   </ItemGroup>
 </Project>
