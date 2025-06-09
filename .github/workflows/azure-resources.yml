@@ -3,6 +3,10 @@ name: Provision Azure Tables
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   provision:
     runs-on: ubuntu-latest
