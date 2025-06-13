@@ -1,4 +1,5 @@
-﻿using AccountTransfer.Interfaces;
+﻿using System.Security.Principal;
+using AccountTransfer.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -17,11 +18,27 @@ var client = host.Services.GetRequiredService<IClusterClient>();
 var transactionClient = host.Services.GetRequiredService<ITransactionClient>();
 var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
 
-var accountNames = new[] { "Xaawo", "Pasqualino", "Derick", "Ida", "Stacy", "Xiao" };
+var accountNames = new[] { "Alice", "Bob" };
 var random = Random.Shared;
 
+for (int i = 0; i < 5; i++)
+{
+    await transactionClient.RunTransaction(
+        TransactionOption.Create,
+        async () =>
+        {
+            await client.GetGrain<IAccountGrain>("Bob").Withdraw(100);
+            await client.GetGrain<IAccountGrain>("Alice").Deposit(100);
+            if (i == 4)
+            {
+                string s = "tady breakpoint";
+            }
+        }
+    );
+}
 while (!lifetime.ApplicationStopping.IsCancellationRequested)
 {
+    break;
     // Choose some random accounts to exchange money
     var fromIndex = random.Next(accountNames.Length);
     var toIndex = random.Next(accountNames.Length);
