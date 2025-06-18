@@ -21,72 +21,16 @@ var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
 var accountNames = new[] { "Alice", "Bob" };
 var random = Random.Shared;
 
+IAccountGrain alice = client.GetGrain<IAccountGrain>("Alice");
+IAccountGrain bob = client.GetGrain<IAccountGrain>("Bob");
+IAtmGrain atm = client.GetGrain<IAtmGrain>(0);
+
 for (int i = 0; i < 5; i++)
 {
-    await transactionClient.RunTransaction(
-        TransactionOption.Create,
-        async () =>
-        {
-            await client.GetGrain<IAccountGrain>("Bob").Withdraw(100);
-            await client.GetGrain<IAccountGrain>("Alice").Deposit(100);
-            if (i == 4)
-            {
-                string s = "tady breakpoint";
-            }
-        }
-    );
-}
-while (!lifetime.ApplicationStopping.IsCancellationRequested)
-{
-    break;
-    // Choose some random accounts to exchange money
-    var fromIndex = random.Next(accountNames.Length);
-    var toIndex = random.Next(accountNames.Length);
-    while (toIndex == fromIndex)
-    {
-        // Avoid transferring to/from the same account, since it would be meaningless
-        toIndex = (toIndex + 1) % accountNames.Length;
-    }
-
-    var fromKey = accountNames[fromIndex];
-    var toKey = accountNames[toIndex];
-    var fromAccount = client.GetGrain<IAccountGrain>(fromKey);
-    var toAccount = client.GetGrain<IAccountGrain>(toKey);
-
-    // Perform the transfer and query the results
-    try
-    {
-        var transferAmount = random.Next(200);
-
-        await transactionClient.RunTransaction(
-            TransactionOption.Create,
-            async () =>
-            {
-                await fromAccount.Withdraw(transferAmount);
-                await toAccount.Deposit(transferAmount);
-            });
-
-        var fromBalance = await fromAccount.GetBalance();
-        var toBalance = await toAccount.GetBalance();
-
-        Console.WriteLine(
-            $"We transferred {transferAmount} credits from {fromKey} to " +
-            $"{toKey}.\n{fromKey} balance: {fromBalance}\n{toKey} balance: {toBalance}\n");
-    }
-    catch (Exception exception)
-    {
-        Console.WriteLine(
-            $"Error transferring credits from " +
-            $"{fromKey} to {toKey}: {exception.Message}");
-
-        if (exception.InnerException is { } inner)
-        {
-            Console.WriteLine($"\tInnerException: {inner.Message}\n");
-        }
-
-        Console.WriteLine();
-    }
-
-    // Sleep and run again
+    Console.WriteLine($"Before: Alice: {await alice.GetBalance()}, Bob: {await bob.GetBalance()}");
+    await atm.Transfer(alice, bob, 100);
+    Console.WriteLine($"After:  Alice: {await alice.GetBalance()}, Bob: {await bob.GetBalance()}\n");
     await Task.Delay(TimeSpan.FromMilliseconds(200));
 }
+
+Console.ReadLine();

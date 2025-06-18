@@ -13,7 +13,7 @@ await Host.CreateDefaultBuilder(args)
     {
         logging.ClearProviders();
         logging.AddConsole();
-        logging.SetMinimumLevel(LogLevel.Debug);
+        logging.SetMinimumLevel(LogLevel.Warning);
     })
 
     .UseOrleans(siloBuilder =>
@@ -21,12 +21,8 @@ await Host.CreateDefaultBuilder(args)
         string? connectionString = siloBuilder.Configuration.GetValue<string>("Orleans:AzureTable:ConnectionString");
         TableServiceClient tableServiceClient = new(connectionString);
 
-        siloBuilder
+        _ = siloBuilder
             .UseLocalhostClustering()
-            .AddAzureTableGrainStorageAsDefault(options =>
-            {
-                options.TableServiceClient = tableServiceClient;
-            })
             .AddAzureTableTransactionalStateStorageAsDefault(options =>
             {
                 options.TableServiceClient = tableServiceClient;

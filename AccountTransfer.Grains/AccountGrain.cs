@@ -7,6 +7,7 @@ namespace AccountTransfer.Grains;
 [GenerateSerializer]
 public record class Balance
 {
+    [Id(0)]
     public int Value { get; set; } = 1_000;
 }
 
