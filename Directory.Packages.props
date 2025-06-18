@@ -5,13 +5,13 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.0-preview.5.25277.114" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0-preview.5.25277.114" />
     <PackageVersion Include="Microsoft.Orleans.Client" Version="9.0.1" />
     <PackageVersion Include="Microsoft.Orleans.Sdk" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Orleans.Server" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Orleans.Transactions" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Orleans.Persistence.AzureStorage" Version="9.0.1" />
-    <PackageVersion Include="Microsoft.Orleans.Transactions.AzureStorage" Version="9.0.1" />
+    <PackageVersion Include="Microsoft.Orleans.Server" Version="9.2.0-preview3" />
+    <PackageVersion Include="Microsoft.Orleans.Transactions" Version="9.2.0-preview3" />
+    <PackageVersion Include="Microsoft.Orleans.Persistence.AzureStorage" Version="9.2.0-preview3" />
+    <PackageVersion Include="Microsoft.Orleans.Transactions.AzureStorage" Version="9.2.0-preview3" />
   </ItemGroup>
 </Project>
