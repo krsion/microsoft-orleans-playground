@@ -15,8 +15,6 @@ using IHost host = Host.CreateDefaultBuilder(args)
 await host.StartAsync();
 
 var client = host.Services.GetRequiredService<IClusterClient>();
-var transactionClient = host.Services.GetRequiredService<ITransactionClient>();
-var lifetime = host.Services.GetRequiredService<IHostApplicationLifetime>();
 
 var accountNames = new[] { "Alice", "Bob" };
 var random = Random.Shared;
