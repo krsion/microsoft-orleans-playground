@@ -1,43 +1,26 @@
 ﻿using AccountTransfer.Interfaces;
-using Orleans.Concurrency;
-using Orleans.Transactions.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Orleans.Journaling;
 
 namespace AccountTransfer.Grains;
 
-[GenerateSerializer]
-public record class Balance
+#pragma warning disable ORLEANSEXP005  
+public sealed class AccountGrain([FromKeyedServices("balance")] IDurableValue<int> balance) : DurableGrain, IAccountGrain
 {
-    [Id(0)]
-    public int Value { get; set; } = 1_000;
-}
+    public async Task Deposit(int amount)
+    {
+        balance.Value += amount;
+        await WriteStateAsync();
+    }
 
-[Reentrant]
-public sealed class AccountGrain : Grain, IAccountGrain
-{
-    private readonly ITransactionalState<Balance> _balance;
+    public async Task Withdraw(int amount)
+    {
+        balance.Value -= amount;
+        await WriteStateAsync();
+    }
 
-    public AccountGrain(
-        [TransactionalState("balance")] ITransactionalState<Balance> balance) =>
-        _balance = balance ?? throw new ArgumentNullException(nameof(balance));
-
-    public Task Deposit(int amount) =>
-        _balance.PerformUpdate(
-            balance => balance.Value += amount);
-
-    public Task Withdraw(int amount) =>
-        _balance.PerformUpdate(balance =>
-        {
-            if (balance.Value < amount)
-            {
-                throw new InvalidOperationException(
-                    $"Withdrawing {amount} credits from account " +
-                    $"\"{this.GetPrimaryKeyString()}\" would overdraw it." +
-                    $" This account has {balance.Value} credits.");
-            }
-
-            balance.Value -= amount;
-        });
-
-    public Task<int> GetBalance() =>
-        _balance.PerformRead(balance => balance.Value);
+    public Task<int> GetBalance()
+    {
+        return Task.FromResult(balance.Value);
+    }
 }

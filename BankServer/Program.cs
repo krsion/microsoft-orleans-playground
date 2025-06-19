@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Orleans.Journaling;
 
 await Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration((context, config) =>
@@ -13,20 +14,19 @@ await Host.CreateDefaultBuilder(args)
     {
         logging.ClearProviders();
         logging.AddConsole();
-        logging.SetMinimumLevel(LogLevel.Warning);
+        logging.SetMinimumLevel(LogLevel.Debug);
     })
 
     .UseOrleans(siloBuilder =>
     {
         string? connectionString = siloBuilder.Configuration.GetValue<string>("Orleans:AzureTable:ConnectionString");
-        TableServiceClient tableServiceClient = new(connectionString);
-
+#pragma warning disable ORLEANSEXP005
         _ = siloBuilder
             .UseLocalhostClustering()
-            .AddAzureTableTransactionalStateStorageAsDefault(options =>
+            .AddAzureAppendBlobStateMachineStorage(options =>
             {
-                options.TableServiceClient = tableServiceClient;
-            })
-            .UseTransactions();
+                options.ConfigureBlobServiceClient(connectionString);
+                options.ContainerName = "orleans-grain-int-balance-journal";
+            });
     })
     .RunConsoleAsync();

@@ -6,8 +6,7 @@ using Microsoft.Extensions.Hosting;
 using IHost host = Host.CreateDefaultBuilder(args)
     .UseOrleansClient(client =>
     {
-        client.UseLocalhostClustering()
-            .UseTransactions();
+        client.UseLocalhostClustering();
     })
     .UseConsoleLifetime()
     .Build();
