@@ -5,22 +5,21 @@ using Orleans.Journaling;
 namespace AccountTransfer.Grains;
 
 #pragma warning disable ORLEANSEXP005  
-public sealed class AccountGrain([FromKeyedServices("balance")] IDurableValue<int> balance) : DurableGrain, IAccountGrain
+public sealed class AccountGrain(
+    [FromKeyedServices("balance")] IDurableValue<int> balance,
+    IStateMachineManager stateMachineManager) : Grain, IAccountGrain
 {
     public async Task Deposit(int amount)
     {
         balance.Value += amount;
-        await WriteStateAsync();
+        await stateMachineManager.WriteStateAsync(default);
     }
 
     public async Task Withdraw(int amount)
     {
         balance.Value -= amount;
-        await WriteStateAsync();
+        await stateMachineManager.WriteStateAsync(default);
     }
 
-    public Task<int> GetBalance()
-    {
-        return Task.FromResult(balance.Value);
-    }
+    public Task<int> GetBalance() => Task.FromResult(balance.Value);
 }
